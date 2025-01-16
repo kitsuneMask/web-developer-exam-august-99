@@ -40,6 +40,21 @@ function addBook(ev) {
         const table = document.querySelector(".main-table");
         const book = document.createElement("tr");
 
+        const actionButtonContainer = document.createElement("td");
+        actionButtonContainer.classList.add("action-button-container");
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-button", "btn");
+        deleteButton.setAttribute("data-bs-toggle", "modal");
+        deleteButton.setAttribute("data-bs-target", "#deleteModal");
+        deleteButton.setAttribute("data-book-id", bookData["id"]);
+        deleteButton.innerHTML = "DEL";
+        deleteButton.addEventListener("click", () => {
+            bookIdForDeletion = bookData["id"];
+            document.getElementById("bookTitleForDeletion").innerHTML = bookData["title"];
+            showNoBookDialog();
+        });
+
         book.innerHTML = `
             <td>${bookData["title"]}</td>
             <td>${bookData["isbn"]}</td>
@@ -47,16 +62,14 @@ function addBook(ev) {
             <td>${bookData["publisher"]}</td>
             <td>${bookData["yearPublished"]}</td>
             <td>${bookData["category"]}</td>
-            <td class="action-button-container">
-                <button class="edit-button btn" data-bs-toggle="modal" data-bs-target="#editModal" data-book-id="${bookData["id"]}">EDIT</button>
-                <button class="delete-button btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-book-id="${bookData["id"]}">DEL</button>
-            </td>
         `;
 
         table.querySelector("tbody").appendChild(book);
+        actionButtonContainer.appendChild(deleteButton);
+        book.appendChild(actionButtonContainer);
 
         // remove no-books-dialog if there is book existing
-        if (document.getElementById("no-books-dialog")) document.getElementById("no-books-dialog").parentNode.removeChild(document.getElementById("no-books-dialog"));
+        if (document.getElementById("no-books-dialog")) document.getElementById("no-books-dialog").parentElement.removeChild(document.getElementById("no-books-dialog"));
 
         clearFormInputs();
 
@@ -83,8 +96,7 @@ function eventForDeleteButtons() {
 
 function deleteModal(ev, bookId) {
     bookIdForDeletion = bookId;
-    const bookTitleForDeletion = document.getElementById("bookTitleForDeletion");
-    bookTitleForDeletion.innerHTML = ev.currentTarget.parentNode.parentNode.firstElementChild.innerHTML;
+    document.getElementById("bookTitleForDeletion").innerHTML = ev.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
 }
 
 function deleteBook(ev) {
@@ -96,9 +108,23 @@ function deleteBook(ev) {
     xhr.setRequestHeader( "Content-type", "application/x-www-form-urlencoded");
 
     xhr.onload = () => {
-        console.log(JSON.parse(xhr.responseText));
+        if (JSON.parse(xhr.responseText)[0]) {
+            removeBookFromDisplay();
+        }
     };
 
     xhr.send(`id=${bookIdForDeletion}`);
 
+    function removeBookFromDisplay() {
+        const deleteButton = document.querySelector(".main-table").querySelector(`button[data-book-id="${bookIdForDeletion}"]`);
+        document.querySelector(".main-table").querySelector("tbody").removeChild(deleteButton.parentElement.parentElement);
+        showNoBookDialog();
+    }
+
+}
+
+function showNoBookDialog() {
+    const tableBody = document.querySelector(".main-table").querySelector("tbody");
+    if (tableBody.children.length > 0) return;
+    tableBody.innerHTML = "<tr id='no-books-dialog'><td colspan='7' class='p-4 fs-4 text-center'>No Books To Show</td></tr>";
 }
