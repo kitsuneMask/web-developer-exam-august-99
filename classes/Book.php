@@ -26,14 +26,15 @@
 
         public function addBook() {
             $query = "INSERT INTO books (title, isbn, author, publisher, year_published, category) VALUES (:title, :isbn, :author, :publisher, :year_published, :category)";
-            $stmt = $this->connect()->prepare($query);
+            $connect = $this->connect();
+            $stmt = $connect->prepare($query);
             $stmt->bindParam(":title",$this->title);
             $stmt->bindParam(":isbn",$this->isbn);
             $stmt->bindParam(":author",$this->author);
             $stmt->bindParam(":publisher",$this->publisher);
             $stmt->bindParam(":year_published",$this->yearPublished);
             $stmt->bindParam(":category",$this->category);
-            return $stmt->execute();
+            return [$stmt->execute(), $connect->lastInsertId()];
         }
 
     }

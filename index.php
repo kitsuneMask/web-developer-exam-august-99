@@ -54,7 +54,7 @@
 
                         // NO BOOKS
                         else {
-                            echo "<td colspan='7' id='no-books-dialog' class='p-4 fs-4 text-center'>No Books To Show</td>";
+                            echo "<tr id='no-books-dialog'><td colspan='7' class='p-4 fs-4 text-center'>No Books To Show</td><tr>";
                         }
 
                     ?>

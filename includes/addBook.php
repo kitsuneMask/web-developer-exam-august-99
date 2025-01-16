@@ -15,8 +15,10 @@
                 $_POST["category"]
             );
 
-            if ($book->addBook()) {
-                returnBookDataOnSuccess();
+            $addBook = $book->addBook();
+
+            if ($addBook[0]) {
+                returnBookDataOnSuccess($addBook[1]);
             }
 
         }
@@ -38,8 +40,10 @@
         }
     }
 
-    function returnBookDataOnSuccess() {
+    function returnBookDataOnSuccess($id) {
+
         $data = [
+            "id" => $id,
             "title" => $_POST["title"],
             "isbn" => $_POST["isbn"],
             "author" => $_POST["author"],

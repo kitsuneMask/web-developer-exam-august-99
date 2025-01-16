@@ -34,10 +34,10 @@
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             
             if ($stmt->execute()) {
-                echo json_encode(["success" => true]);
+                echo json_encode([true]);
             }
             else {
-                echo json_encode(["success" => false]);
+                echo json_encode([false]);
             }
         }
 
