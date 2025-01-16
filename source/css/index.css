@@ -3,24 +3,47 @@
     border: none;
 }
 
-body {
-    display: flex;
-    justify-items: center;
-    align-items: center;
-    width: 100vw;
-}
-
 main {
-    background-color: green;
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
-    width: inherit;
     height: 100vh;
-    padding: 4rem;
+    padding: 64px;
 }
 
-.table-con > div {
-    background-color: red;
+.main-table-con > thead > tr > th,
+.add-table > tbody > tr > th {
+    font-size: 13px;
+    color: #5c5c5c !important;
+}
+
+.main-table-con > tbody > tr > td {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #898989 !important;
+}
+
+.add-button {
+    background-color: #39b54a !important;
+    font-size: 13px;
+}
+
+.action-button-container {
+    padding: 0 8px;
+}
+
+.edit-button {
+    margin-right: 8px;
+}
+
+.edit-button,
+.delete-button {
+    padding: 2px 12px;
+    background: #c2c2c2 !important;
+    color: white;
+    font-size: 12px;
+}
+
+.add-table > tbody > tr > td > input {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #898989 !important;
 }
