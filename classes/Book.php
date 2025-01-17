@@ -37,5 +37,18 @@
             return [$stmt->execute(), $connect->lastInsertId()];
         }
 
+        public function editBook($id) {
+            $query = "UPDATE books SET title = :title, isbn = :isbn, author = :author, publisher = :publisher, year_published = :year_published, category = :category WHERE id = :id";
+            $stmt = $this->connect()->prepare($query);
+            $stmt->bindParam(":title",$this->title);
+            $stmt->bindParam(":isbn",$this->isbn);
+            $stmt->bindParam(":author",$this->author);
+            $stmt->bindParam(":publisher",$this->publisher);
+            $stmt->bindParam(":year_published",$this->yearPublished);
+            $stmt->bindParam(":category",$this->category);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        }
+
     }
 

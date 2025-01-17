@@ -1,21 +1,25 @@
 window.onload = () => {
 
     document.getElementById("addBookForm").addEventListener("submit", addBook);
+    document.getElementById("editBookForm").addEventListener("submit", editBook);
     document.getElementById("deleteBookForm").addEventListener("submit", deleteBook);
+
+    // add event for all edit book button
+    eventForEditButtons();
 
     // add event for all delete book button
     eventForDeleteButtons();
 
 };
 
-let bookIdForDeletion;
+let bookIdForModification, bookIdForDeletion;
 
 
 function addBook(ev) {
 
     ev.preventDefault();
 
-    // data
+    // inputs
     const title = document.getElementById("addTitle");
     const isbn = document.getElementById("addIsbn");
     const author = document.getElementById("addAuthor");
@@ -43,6 +47,18 @@ function addBook(ev) {
         const actionButtonContainer = document.createElement("td");
         actionButtonContainer.classList.add("action-button-container");
 
+        const editButton = document.createElement("button");
+        editButton.classList.add("edit-button", "btn");
+        editButton.setAttribute("data-bs-toggle", "modal");
+        editButton.setAttribute("data-bs-target", "#editModal");
+        editButton.setAttribute("data-book-id", bookData["id"]);
+        editButton.innerHTML = "EDIT";
+        editButton.addEventListener("click", () => {
+            bookIdForModification = bookData["id"];
+            document.getElementById("bookTitleForModification").innerHTML = bookData["title"];
+            setPlaceholderForBookModification();
+        });
+
         const deleteButton = document.createElement("button");
         deleteButton.classList.add("delete-button", "btn");
         deleteButton.setAttribute("data-bs-toggle", "modal");
@@ -65,6 +81,7 @@ function addBook(ev) {
         `;
 
         table.querySelector("tbody").appendChild(book);
+        actionButtonContainer.appendChild(editButton);
         actionButtonContainer.appendChild(deleteButton);
         book.appendChild(actionButtonContainer);
 
@@ -86,17 +103,103 @@ function addBook(ev) {
 
 }
 
-function eventForDeleteButtons() {
-    const deleteButtons = [ ...document.getElementsByClassName("delete-button") ];
-    deleteButtons.forEach( button => {
-        const bookId = button.dataset.bookId;
-        button.addEventListener("click", (ev) => deleteModal(ev, bookId));
+function eventForEditButtons() {
+    const editButtons = [ ...document.getElementsByClassName("edit-button") ];
+    editButtons.forEach(button => {
+        button.addEventListener("click", (ev) => {
+            bookIdForModification = button.dataset.bookId;
+            document.getElementById("bookTitleForModification").innerHTML = ev.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
+            setPlaceholderForBookModification();
+        });
     })
 }
 
-function deleteModal(ev, bookId) {
-    bookIdForDeletion = bookId;
-    document.getElementById("bookTitleForDeletion").innerHTML = ev.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
+function setPlaceholderForBookModification() {
+
+    // inputs
+    const title = document.getElementById("editTitle");
+    const isbn = document.getElementById("editIsbn");
+    const author = document.getElementById("editAuthor");
+    const publisher = document.getElementById("editPublisher");
+    const yearPublished = document.getElementById("editYearPublished");
+    const category = document.getElementById("editCategory");
+
+    // book details
+    const bookDetails = document.querySelector(".main-table").querySelector(`button[data-book-id="${bookIdForModification}"]`).parentElement.parentElement.children;
+
+    title.setAttribute("placeholder",bookDetails[0].innerHTML);
+    isbn.setAttribute("placeholder",bookDetails[1].innerHTML);
+    author.setAttribute("placeholder",bookDetails[2].innerHTML);
+    publisher.setAttribute("placeholder",bookDetails[3].innerHTML);
+    yearPublished.setAttribute("placeholder",bookDetails[4].innerHTML);
+    category.setAttribute("placeholder",bookDetails[5].innerHTML);
+
+}
+
+function editBook(ev) {
+
+    ev.preventDefault();
+
+    // inputs
+    const title = document.getElementById("editTitle");
+    const isbn = document.getElementById("editIsbn");
+    const author = document.getElementById("editAuthor");
+    const publisher = document.getElementById("editPublisher");
+    const yearPublished = document.getElementById("editYearPublished");
+    const category = document.getElementById("editCategory");
+
+    // book details
+    const bookDetails = document.querySelector(".main-table").querySelector(`button[data-book-id="${bookIdForModification}"]`).parentElement.parentElement.children;
+
+    const data = `id=${bookIdForModification}`
+        + `&title=${title.value || bookDetails[0].innerHTML}`
+        + `&isbn=${isbn.value || bookDetails[1].innerHTML}`
+        + `&author=${author.value || bookDetails[2].innerHTML}`
+        + `&publisher=${publisher.value || bookDetails[3].innerHTML}`
+        + `&yearPublished=${yearPublished.value || bookDetails[4].innerHTML}`
+        + `&category=${category.value || bookDetails[5].innerHTML}`
+    ;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "./includes/editBook.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    xhr.onload = () => {
+        updateModifiedBooks(bookDetails, JSON.parse(xhr.responseText));
+        clearFormInputs();
+    };
+
+    xhr.send(data);
+
+    function clearFormInputs() {
+        title.value = "";
+        isbn.value = "";
+        author.value = "";
+        publisher.value = "";
+        yearPublished.value = "";
+        category.value = "";
+    }
+
+}
+
+function updateModifiedBooks(bookDetails, updatedDetails) {
+    bookDetails[0].innerHTML = updatedDetails["title"];
+    bookDetails[1].innerHTML = updatedDetails["isbn"];
+    bookDetails[2].innerHTML = updatedDetails["author"];
+    bookDetails[3].innerHTML = updatedDetails["publisher"];
+    bookDetails[4].innerHTML = updatedDetails["yearPublished"];
+    bookDetails[5].innerHTML = updatedDetails["category"];
+}
+
+
+function eventForDeleteButtons() {
+    const deleteButtons = [ ...document.getElementsByClassName("delete-button") ];
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", (ev) => {
+            bookIdForDeletion = button.dataset.bookId;
+            document.getElementById("bookTitleForDeletion").innerHTML = ev.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
+        });
+    })
 }
 
 function deleteBook(ev) {

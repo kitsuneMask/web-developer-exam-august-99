@@ -136,55 +136,57 @@
                     <button type="button" class="btn-close bg-secondary-subtle" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h1 class="modal-title fw-bold text-center" id="editModalLabel" style="font-size: 1.563rem; color: #5c5c5c;">EDIT LOREM</h1>
-                    <table class="add-table table table-borderless mt-4">
-                        <tbody>
-                            <tr class="align-middle">
-                                <th scope="row">Title</th>
-                                <td>
-                                    <input type="text" name="title" spellcheck="false" class="border border-secondary-subtle" />
-                                </td>
-                            </tr>
-                            <tr class="align-middle">
-                                <th scope="row">ISBN</th>
-                                <td>
-                                    <input type="text" name="title" spellcheck="false" class="border border-secondary-subtle" />
-                                </td>
-                            </tr>
-                            <tr class="align-middle">
-                                <th scope="row">Author</th>
-                                <td>
-                                    <input type="text" name="title" spellcheck="false" class="border border-secondary-subtle" />
-                                </td>
-                            </tr>
-                            <tr class="align-middle">
-                                <th scope="row">Publisher</th>
-                                <td>
-                                    <input type="text" name="title" spellcheck="false" class="border border-secondary-subtle" />
-                                </td>
-                            </tr>
-                            <tr class="align-middle">
-                                <th scope="row">Year Published</th>
-                                <td>
-                                    <input type="text" name="title" spellcheck="false" class="border border-secondary-subtle" />
-                                </td>
-                            </tr>
-                            <tr class="align-middle">
-                                <th scope="row">Category</th>
-                                <td>
-                                    <input type="text" name="title" spellcheck="false" class="border border-secondary-subtle" />
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <button class="btn text-white px-4" style="background: #39b54a; font-size: 13px;">Save</button>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <form id="editBookForm">
+                        <h1 class="modal-title fw-bold text-center" id="editModalLabel" style="font-size: 1.563rem; color: #5c5c5c;">EDIT <span id="bookTitleForModification"></span></h1>
+                        <table class="add-table table table-borderless mt-4">
+                            <tbody>
+                                <tr class="align-middle">
+                                    <th scope="row">Title</th>
+                                    <td>
+                                        <input type="text" id="editTitle" spellcheck="false" class="border border-secondary-subtle" />
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <th scope="row">ISBN</th>
+                                    <td>
+                                        <input type="text" id="editIsbn" spellcheck="false" class="border border-secondary-subtle" />
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <th scope="row">Author</th>
+                                    <td>
+                                        <input type="text" id="editAuthor" spellcheck="false" class="border border-secondary-subtle" />
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <th scope="row">Publisher</th>
+                                    <td>
+                                        <input type="text" id="editPublisher" spellcheck="false" class="border border-secondary-subtle" />
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <th scope="row">Year Published</th>
+                                    <td>
+                                        <input type="text" id="editYearPublished" spellcheck="false" class="border border-secondary-subtle" />
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <th scope="row">Category</th>
+                                    <td>
+                                        <input type="text" id="editCategory" spellcheck="false" class="border border-secondary-subtle" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button type="submit" data-bs-dismiss="modal" class="btn text-white px-4" style="background: #39b54a; font-size: 13px;">Save</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
